@@ -3,10 +3,12 @@ name: Daily Ness Scanner
 # 1. When should this run?
 on:
   schedule:
-    # This runs every day at 06:00 UTC (which is 09:00 AM Israel Time)
-    - cron: '0 6 * * *' 
+    # 0 = Minute 0
+    # 7,15 = Hour 7 and Hour 15 UTC (10:00 AM and 6:00 PM Israel Time)
+    # * * * = Every day of the month, every month, every day of the week
+    - cron: '0 7,15 * * *' 
   # This allows you to manually click a "Run" button in GitHub to test it
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   run-scanner:
