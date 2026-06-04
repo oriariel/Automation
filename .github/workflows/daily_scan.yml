@@ -41,5 +41,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add ness_jobs.db
+          # Notice the exact folder name is included in the file paths!
+          touch Ness_Scanner/ness_jobs.db
+          git add Ness_Scanner/ness_jobs.dbadd ness_jobs.db
           git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update jobs database" && git push)
