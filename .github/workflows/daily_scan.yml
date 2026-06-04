@@ -30,8 +30,8 @@ jobs:
         run: pip install requests 
 
       - name: Run the scanner script
-        # We pass your hidden secret into the environment so the script can use it
-        working-directory: ./"Ness Scanner"
+        # Using the exact folder name without quotes or spaces
+        working-directory: Ness_Scanner
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: python check_daily_jobs.py
@@ -41,7 +41,6 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          # Notice the exact folder name is included in the file paths!
           touch Ness_Scanner/ness_jobs.db
-          git add Ness_Scanner/ness_jobs.dbadd ness_jobs.db
+          git add Ness_Scanner/ness_jobs.db
           git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update jobs database" && git push)
