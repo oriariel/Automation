@@ -1,0 +1,44 @@
+name: Daily Ness Scanner
+
+# 1. When should this run?
+on:
+  schedule:
+    # This runs every day at 06:00 UTC (which is 09:00 AM Israel Time)
+    - cron: '0 6 * * *' 
+  # This allows you to manually click a "Run" button in GitHub to test it
+  workflow_dispatch: 
+
+jobs:
+  run-scanner:
+    runs-on: ubuntu-latest
+
+    # We need permission to push the updated database back to the repo
+    permissions:
+      contents: write 
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        # Your script uses the 'requests' library, so we must install it
+        run: pip install requests 
+
+      - name: Run the scanner script
+        # We pass your hidden secret into the environment so the script can use it
+        env:
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python check_daily_jobs.py
+
+      - name: Save the updated database back to GitHub
+        # This step checks if ness_jobs.db changed. If yes, it saves it.
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add ness_jobs.db
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update jobs database" && git push)
