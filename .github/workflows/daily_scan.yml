@@ -31,6 +31,7 @@ jobs:
 
       - name: Run the scanner script
         # We pass your hidden secret into the environment so the script can use it
+        working-directory: ./"Ness Scanner"
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: python check_daily_jobs.py
